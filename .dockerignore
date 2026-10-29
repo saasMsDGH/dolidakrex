@@ -1,0 +1,6 @@
+.git
+**/.git
+**/.secrets
+**/node_modules
+**/test
+**/dev

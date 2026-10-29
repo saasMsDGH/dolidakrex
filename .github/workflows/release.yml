@@ -8,6 +8,7 @@ on:
 
 jobs:
   release-dolibarr-version:
+    if: github.repository == 'Dolibarr/dolibarr-docker'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6

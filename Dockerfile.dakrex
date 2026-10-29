@@ -1,0 +1,21 @@
+FROM dolibarr/dolibarr:24.0.1@sha256:638727a1a035515b8f1e9c7694ee25315c4b79d618d4f19878efda977b20d49f
+
+ARG DOLI_SOURCE_REV
+ARG DAKREX_BUILD_REV
+LABEL org.opencontainers.image.title="DOLIDAKREX" \
+      org.opencontainers.image.source="https://github.com/saasMsDGH/doli" \
+      org.opencontainers.image.revision="${DOLI_SOURCE_REV}" \
+      org.opencontainers.image.version="24.0.1" \
+      io.dgsynthex.dolidakrex.build-revision="${DAKREX_BUILD_REV}"
+
+USER root
+# Keep the pinned PHP runtime; replace all application files with our fork's sources.
+RUN find /var/www/html -mindepth 1 -delete \
+    && find /var/www/scripts -mindepth 1 -delete
+COPY --chown=33:33 doli/htdocs/ /var/www/html/
+COPY --chown=33:33 doli/scripts/ /var/www/scripts/
+RUN chmod -R a-w /var/www/html /var/www/scripts
+
+USER 33:33
+ENTRYPOINT []
+CMD ["apache2-foreground"]

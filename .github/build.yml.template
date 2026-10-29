@@ -15,6 +15,7 @@ on:
 
 jobs:
   build-docker-images:
+    if: github.repository == 'Dolibarr/dolibarr-docker'
     strategy:
       fail-fast: false
       matrix:
@@ -35,13 +36,14 @@ jobs:
           ./update.sh ${{ matrix.dolibarr_version }}
 
   update-readme:
+    if: github.repository == 'Dolibarr/dolibarr-docker'
     runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v6
       - run: |
           echo secrets.DOCKER_HUB_USERNAME=${{ secrets.DOCKER_HUB_USERNAME }}
           docker run --rm -t \
-          -v $(pwd):/src \
+          -v "$(pwd):/src" \
           -e DOCKER_USER=${{ secrets.DOCKER_HUB_USERNAME }} \
           -e DOCKER_PASS=${{ secrets.DOCKER_HUB_PASSWORD }} \
           -e PUSHRM_PROVIDER=dockerhub \
